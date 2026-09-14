@@ -51,18 +51,19 @@ VALUES MYLIB.CALC_MONTHLY_PAYMENT(10000.00, 0.0525, 36);
 ```
 CALCSVCS.rpgle                                  RPG source member, deployed to IBM i separately
 build.gradle, settings.gradle                   Gradle build for the Groovy/Spock side
+gradlew, gradlew.bat, gradle/wrapper/           Gradle wrapper (pinned to Gradle 8.14.3) - no local Gradle install required
 src/test/groovy/RpgSubprocedureSpec.groovy      The Spock spec
 ```
 
 Run the tests with:
 
 ```bash
-gradle test
+./gradlew test        # Windows: gradlew.bat test
 ```
 
-(There's no `gradlew` checked in - this sandbox couldn't reach `services.gradle.org` to generate one. Add a wrapper with `gradle wrapper` from a machine with normal internet access if you want one, or just use a locally installed Gradle 8.x.)
+The wrapper downloads Gradle 8.14.3 the first time you run it, so that first run needs a normal internet connection; every run after that is cached locally. If you'd rather use a Gradle you already have installed, `gradle test` still works the same way.
 
-If you change an environment variable in a shell where a Gradle daemon is already running, stop it first (`gradle --stop`) or pass `--no-daemon` - a live daemon keeps the environment it originally started with.
+If you change an environment variable in a shell where a Gradle daemon is already running, stop it first (`./gradlew --stop`) or pass `--no-daemon` - a live daemon keeps the environment it originally started with.
 
 ## Groovy test pattern
 
