@@ -14,34 +14,23 @@ The goal is to keep one canonical contract: the SQL UDFs and the RPG exports mat
 ```
 CALCSVCS.rpgle               RPG source member, deployed to IBM i separately
 RpgSubprocedureSpec.groovy   The Spock spec
-pom.xml                      Maven dependency declarations (no build wired up - see below)
+pom.xml                      Maven build - dependencies plus the plugins that compile and run the spec
 ```
 
 ## Running the tests
 
-`pom.xml` declares the dependencies but nothing here invokes Maven to
-compile or run them, so running the spec still means compiling it yourself
-and handing it to JUnit Platform's console launcher, which is what actually
-executes a Spock spec - Spock plugs into JUnit Platform as a `TestEngine`
-rather than being invoked directly:
-
 ```bash
-groovyc -cp "groovy-4.0.33.jar:spock-core-2.4-groovy-4.0.jar:mapepire-sdk-0.1.3.jar:junit-platform-console-standalone-1.14.1.jar" \
-        -d build/classes RpgSubprocedureSpec.groovy
-
-java -jar junit-platform-console-standalone-1.14.1.jar \
-     --select-class RpgSubprocedureSpec \
-     --classpath "build/classes:groovy-4.0.33.jar:spock-core-2.4-groovy-4.0.jar:mapepire-sdk-0.1.3.jar:<mapepire-sdk's transitive jars>"
+mvn test
 ```
 
-The first command compiles `RpgSubprocedureSpec.groovy` against the jars
-corresponding to the dependencies declared in `pom.xml`. The second runs it: `junit-platform-console-standalone`
-is a separate, self-contained "fat jar" (`org.junit.platform:junit-platform-console-standalone:1.14.1`)
-that bundles the JUnit Platform Launcher and a command-line front end, and
-`--select-class` tells it to run one specific class rather than scanning the
-whole classpath for tests. You'd need to download each jar above from Maven
-Central yourself (or resolve them with Grape, Maven, or another dependency
-manager) since nothing here fetches them automatically.
+`pom.xml` has a `<build>` section wiring this up: the `gmavenplus-plugin`
+compiles `RpgSubprocedureSpec.groovy` (Maven core only compiles `.java` by
+itself), and `maven-surefire-plugin` runs it - Spock plugs into the JUnit
+Platform as a `TestEngine`, and Surefire auto-detects the
+`junit-platform-launcher` dependency already declared above to run it, with
+no extra provider configuration needed. Maven resolves every dependency
+(including mapepire-sdk's own transitive ones, like Jackson and
+Java-WebSocket) from Maven Central automatically.
 
 ## Notes
 - The SQL function name is the public contract that the test calls.

@@ -13,13 +13,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <!--
-        This POM declares the project's dependencies only - there is no <build>
-        section wiring up a Groovy compiler or test-running plugin, so `mvn test`
-        will not compile or execute RpgSubprocedureSpec.groovy as-is. See
-        README.md's "Running the tests" section for how the spec is actually
-        compiled and run.
-    -->
     <dependencies>
         <!-- Language runtime the spec is written in -->
         <dependency>
@@ -53,5 +46,50 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <!--
+                Maven core only knows how to compile .java files - this plugin adds Groovy
+                compilation, picking up the Groovy version from the org.apache.groovy:groovy
+                dependency declared above. testSources is pointed at the project root (rather
+                than the src/test/groovy default) since RpgSubprocedureSpec.groovy lives there.
+            -->
+            <plugin>
+                <groupId>org.codehaus.gmavenplus</groupId>
+                <artifactId>gmavenplus-plugin</artifactId>
+                <version>5.1.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>addTestSources</goal>
+                            <goal>compileTests</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <testSources>
+                        <testSource>
+                            <directory>${project.basedir}</directory>
+                            <includes>
+                                <include>**/*.groovy</include>
+                            </includes>
+                        </testSource>
+                    </testSources>
+                </configuration>
+            </plugin>
+
+            <!--
+                No special configuration needed to run Spock specs: Surefire 3.x auto-detects
+                junit-platform-launcher (declared above) on the test classpath and uses its
+                JUnit Platform provider automatically.
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.6.0</version>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
