@@ -36,6 +36,7 @@ class RpgSubprocedureSpec extends Specification {
         sqlJob?.close()
     }
 
+    // given, when, then and where blocks are assertions for Spock Tests
     def "format zip code with 5-digit and 4-digit extension"() {
         given: "the scalar UDF query"
         def sql = "VALUES MYLIB.FORMAT_ZIP(?, ?)"
