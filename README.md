@@ -34,6 +34,5 @@ export IBMI_USER="TESTUSER"
 export IBMI_PASSWORD="your-strong-password"
 export IBMI_IGNORE_UNAUTHORIZED="true"
 
-export JAVA_HOME=/QOpenSys/QIBM/ProdData/JavaVM/jdk17/64bit
-export PATH=$JAVA_HOME/bin:/QOpenSys/pkgs/bin:$PATH
+export PATH=/QOpenSys/pkgs/bin:$PATH
 ```
