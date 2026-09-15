@@ -15,7 +15,7 @@ pom.xml                      Maven build - dependencies plus the plugins that co
 build.sql                    creates the user defined functions and shows how to test them
 ```
 
-## Running the tests
+## Compile and run the tests
 
 ```bash
 mvn test
