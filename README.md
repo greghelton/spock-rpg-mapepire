@@ -23,23 +23,9 @@ pom.xml                      Maven build - dependencies plus the plugins that co
 mvn test
 ```
 
-`pom.xml` has a `<build>` section wiring this up: the `gmavenplus-plugin`
-compiles `RpgSubprocedureSpec.groovy` (Maven core only compiles `.java` by
-itself), and `maven-surefire-plugin` runs it - Spock plugs into the JUnit
-Platform as a `TestEngine`, and Surefire auto-detects the
-`junit-platform-launcher` dependency already declared above to run it, with
-no extra provider configuration needed. Maven resolves every dependency
-(including mapepire-sdk's own transitive ones, like Jackson and
-Java-WebSocket) from Maven Central automatically.
-
 ## Notes
 - The SQL function name is the public contract that the test calls.
 - The `EXTERNAL NAME` must match the exported RPG subprocedure name exactly.
-- The project is intentionally small and coherent so it can serve as a working sample, not a mixed collection of older examples.
-
-## Authentication
-
-Mapepire's wire protocol only ever authenticates with a plain IBM i user/password pair - confirmed directly against the source of both `mapepire-java` (`DaemonServer` has `host`/`port`/`user`/`password`/`rejectUnauthorized`/`ca` fields, nothing else) and `mapepire-server` (`SystemConnection` authenticates via jt400's `new AS400(system, user, password)`). There's no token field anywhere to switch to, so this project uses `IBMI_PASSWORD` directly.
 
 ## Local setup example
 
