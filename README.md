@@ -9,7 +9,7 @@ This is a Groovy project that relies on Maven to build and execute the Groovy co
 ## Project layout
 
 ```
-CALCSVCS.rpgle               RPG source member
+CALCSVCS.rpgle               RPG subprocedures under test by Spock
 RpgSubprocedureSpec.groovy   The Spock spec
 pom.xml                      Maven build - dependencies plus the plugins that compile and run the spec
 build.sql                    creates the user defined functions and shows how to test them
