@@ -43,19 +43,6 @@ whole classpath for tests. You'd need to download each jar above from Maven
 Central yourself (or resolve them with Grape, Maven, or another dependency
 manager) since nothing here fetches them automatically.
 
-## Groovy test pattern
-
-The Spock test in `RpgSubprocedureSpec.groovy` uses parameterized SQL calls to invoke the UDFs through the Mapepire connection, via the real `mapepire-java` (`io.github.mapepire-ibmi:mapepire-sdk`) API:
-
-```groovy
-def opts = new QueryOptions(false, false, [principal, rate, months])
-def query = sqlJob.query(sql, opts)
-QueryResult result = query.execute().get()
-query.close().get()
-
-result.getSuccess()
-```
-
 ## Notes
 - The SQL function name is the public contract that the test calls.
 - The `EXTERNAL NAME` must match the exported RPG subprocedure name exactly.
