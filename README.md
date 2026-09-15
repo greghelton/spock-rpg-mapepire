@@ -1,9 +1,6 @@
 # Working sample: ILE RPG subprocedures tested through Db2 UDFs with Spock
 
-This sample is meant to be run from an IBM i environment with Mapepire enabled and a valid Db2 UDF deployment.
-This project is a minimal, coherent example of calling exported RPG subprocedures from tests defined in Spock via Mapepire and Db2 SQL functions.
-
-The goal is to keep one canonical contract: the SQL UDFs and the RPG exports match the same names and parameter lists used by the test.
+This is a Groovy project that relies on Maven to build and execute the Groovy code. This project depends on Spock for testing and it depends on IBM i RPG and DB2/400 SQL to create the native IBM i objects.
 
 ## Included functions
 - `FormatZip`
@@ -12,9 +9,10 @@ The goal is to keep one canonical contract: the SQL UDFs and the RPG exports mat
 ## Project layout
 
 ```
-CALCSVCS.rpgle               RPG source member, deployed to IBM i separately
+CALCSVCS.rpgle               RPG source member
 RpgSubprocedureSpec.groovy   The Spock spec
 pom.xml                      Maven build - dependencies plus the plugins that compile and run the spec
+build.sql                    creates the user defined functions and shows how to test them
 ```
 
 ## Running the tests
