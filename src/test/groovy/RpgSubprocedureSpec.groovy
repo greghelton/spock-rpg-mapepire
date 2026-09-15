@@ -25,8 +25,6 @@ class RpgSubprocedureSpec extends Specification {
         int port = portStr.toInteger()
 
         DaemonServer server = new DaemonServer(host, port, user, password)
-        // DaemonServer has no setIgnoreUnauthorized method - rejectUnauthorized defaults to
-        // true (require a valid cert chain), so ignoring TLS validation means setting it false.
         server.setRejectUnauthorized(!ignoreTls)
 
         sqlJob = new SqlJob()

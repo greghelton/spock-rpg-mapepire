@@ -53,6 +53,45 @@ CALCSVCS.rpgle                                  RPG source member, deployed to I
 src/test/groovy/RpgSubprocedureSpec.groovy      The Spock spec
 ```
 
+## Dependencies
+
+This project has no build file (see above) - these are the Maven Central
+coordinates the test code depends on directly:
+
+- `org.apache.groovy:groovy:4.0.33` - language runtime
+- `org.spockframework:spock-core:2.4-groovy-4.0` - testing framework
+- `io.github.mapepire-ibmi:mapepire-sdk:0.1.3` - Mapepire/Db2 client
+- `org.junit.platform:junit-platform-launcher` - runs the spec via the JUnit Platform
+
+Each of these pulls in its own transitive dependencies (e.g. Jackson and
+Java-WebSocket via mapepire-sdk); any Maven-compatible dependency resolver
+will fetch those automatically.
+
+## Running the tests
+
+There's no build file (see above), so running the spec means compiling it
+yourself and handing it to JUnit Platform's console launcher, which is what
+actually executes a Spock spec - Spock plugs into JUnit Platform as a
+`TestEngine` rather than being invoked directly:
+
+```bash
+groovyc -cp "groovy-4.0.33.jar:spock-core-2.4-groovy-4.0.jar:mapepire-sdk-0.1.3.jar:junit-platform-console-standalone-1.14.1.jar" \
+        -d build/classes src/test/groovy/RpgSubprocedureSpec.groovy
+
+java -jar junit-platform-console-standalone-1.14.1.jar \
+     --select-class RpgSubprocedureSpec \
+     --classpath "build/classes:groovy-4.0.33.jar:spock-core-2.4-groovy-4.0.jar:mapepire-sdk-0.1.3.jar:<mapepire-sdk's transitive jars>"
+```
+
+The first command compiles `RpgSubprocedureSpec.groovy` against the jars
+listed in Dependencies above. The second runs it: `junit-platform-console-standalone`
+is a separate, self-contained "fat jar" (`org.junit.platform:junit-platform-console-standalone:1.14.1`)
+that bundles the JUnit Platform Launcher and a command-line front end, and
+`--select-class` tells it to run one specific class rather than scanning the
+whole classpath for tests. You'd need to download each jar above from Maven
+Central yourself (or resolve them with Grape, Maven, or another dependency
+manager) since nothing here fetches them automatically.
+
 ## Groovy test pattern
 
 The Spock test in `RpgSubprocedureSpec.groovy` uses parameterized SQL calls to invoke the UDFs through the Mapepire connection, via the real `mapepire-java` (`io.github.mapepire-ibmi:mapepire-sdk`) API:
